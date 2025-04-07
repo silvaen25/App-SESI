@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finora - Controle Financeiro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body, html {
+      height: 100%;
+    }
+    #login-section, #main-section {
+      display: none;
+    }
+    #login-section.active, #main-section.active {
+      display: block;
+    }
+    #login-section {
+      height: 100vh;
+      background-color: #f0f4f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-box {
+      background: white;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      text-align: center;
+    }
+    .login-box input {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .login-box button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #167c35;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #main-section {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background-color: #167c35;
+      color: white;
+      padding: 1rem;
+    }
+    .sidebar h2 {
+      margin-bottom: 1rem;
+    }
+    .sidebar button {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      background: white;
+      color: #167c35;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .content {
+      flex: 1;
+      padding: 2rem;
+      background-image: url('https://i.imgur.com/yoNn2Eh.png');
+      background-size: cover;
+      background-position: center;
+      color: #000;
+    }
+    .content h1 {
+      background-color: rgba(255,255,255,0.8);
+      padding: 1rem;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="login-section" class="active">
+    <div class="login-box">
+      <h2>Bem-vindo ao Finora</h2>
+      <p>Insira seu nome para continuar:</p>
+      <input type="text" id="username" placeholder="Seu nome" />
+      <br />
+      <button onclick="login()">Entrar</button>
+    </div>
+  </div>
+
+  <div id="main-section">
+    <div class="sidebar">
+      <h2 id="welcome-text">Bem-vindo</h2>
+      <button onclick="navigate('dicas')">Dicas</button>
+      <button onclick="navigate('aulas')">Aulas</button>
+      <button onclick="navigate('calculadora')">Calculadora</button>
+      <button onclick="navigate('saldo')">Saldo</button>
+      <button onclick="navigate('historico')">Histórico</button>
+      <button onclick="navigate('suporte')">Suporte</button>
+      <button onclick="logout()">Sair</button>
+    </div>
+    <div class="content" id="content-area">
+      <h1>Use o menu ao lado para começar</h1>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const name = document.getElementById("username").value.trim();
+      if (name) {
+        document.getElementById("login-section").classList.remove("active");
+        document.getElementById("main-section").classList.add("active");
+        document.getElementById("welcome-text").innerText = `Bem-vindo, ${name}`;
+      } else {
+        alert("Por favor, insira um nome.");
+      }
+    }
+
+    function logout() {
+      document.getElementById("main-section").classList.remove("active");
+      document.getElementById("login-section").classList.add("active");
+      document.getElementById("username").value = "";
+    }
+
+    function navigate(section) {
+      let content = document.getElementById("content-area");
+      switch(section) {
+        case 'dicas':
+          content.innerHTML = `<h1>Dicas Financeiras</h1><p>Aprender a controlar o dinheiro é essencial para um futuro estável. A falta de conhecimento pode gerar dívidas e dificuldades. Invista em educação financeira desde cedo!</p>`;
+          break;
+        case 'aulas':
+          content.innerHTML = `<h1>Aulas</h1>
+            <ul>
+              <li><a href="https://youtu.be/HSXcvFVtsdM" target="_blank">Os 3 fatores</a></li>
+              <li><a href="https://youtu.be/Ep65y-eQxgE" target="_blank">Equilíbrio Financeiro</a></li>
+              <li><a href="https://youtu.be/AfMGeMZmyUU" target="_blank">Organização</a></li>
+              <li><a href="https://youtu.be/CB5zuxQl5ro" target="_blank">Como usar o dinheiro</a></li>
+            </ul>`;
+          break;
+        case 'calculadora':
+          content.innerHTML = `<h1>Calculadora</h1>
+            <input type="number" id="calc1" placeholder="Valor 1" /> +
+            <input type="number" id="calc2" placeholder="Valor 2" />
+            <button onclick="calcular()">Calcular</button>
+            <p id="calc-result"></p>`;
+          break;
+        case 'saldo':
+          content.innerHTML = `<h1>Saldo Atual</h1>
+            <input type="number" id="saldoInput" placeholder="Digite seu saldo atual" onchange="salvarSaldo()" />
+            <p id="saldoTexto"></p>`;
+          break;
+        case 'historico':
+          content.innerHTML = `<h1>Histórico de Movimentações</h1>
+            <p>(Funcionalidade a ser implementada...)</p>`;
+          break;
+        case 'suporte':
+          content.innerHTML = `<h1>Suporte</h1><p>Para ajuda, envie um e-mail para: <strong>nemiasbrandao300@gmail.com</strong></p>`;
+          break;
+      }
+    }
+
+    function calcular() {
+      const v1 = parseFloat(document.getElementById("calc1").value);
+      const v2 = parseFloat(document.getElementById("calc2").value);
+      const result = v1 + v2;
+      document.getElementById("calc-result").innerText = `Resultado: R$ ${result.toFixed(2)}`;
+    }
+
+    function salvarSaldo() {
+      const saldo = document.getElementById("saldoInput").value;
+      document.getElementById("saldoTexto").innerText = `Seu saldo: R$ ${parseFloat(saldo).toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
